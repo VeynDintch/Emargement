@@ -37,32 +37,27 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $civilite = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    private ?string $nomUsuel = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $nomNaissance = null;
+    private ?string $nom = null;
 
     #[ORM\Column(length: 50)]
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 15)]
-    private ?string $numTel = null;
-
-    #[ORM\OneToMany(targetEntity: Inscrire::class, mappedBy: 'utilisateur')]
-    private Collection $inscrires;
     
 
     #[ORM\OneToMany(targetEntity: Emarger::class, mappedBy: 'utilisateur')]
     private Collection $emargers;
 
-    #[ORM\ManyToMany(targetEntity: Matiere::class, inversedBy: 'utilisateurs')]
-    private Collection $matiere;
+    #[ORM\ManyToMany(targetEntity: Promotion::class, inversedBy: 'utilisateurs')]
+    private Collection $promotion;
+
+    #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'utilisateur')]
+    private Collection $sessions;
 
     public function __construct()
     {
-        $this->inscrires = new ArrayCollection();
         $this->emargers = new ArrayCollection();
-        $this->matiere = new ArrayCollection();
+        $this->promotion = new ArrayCollection();
+        $this->sessions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -152,29 +147,18 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getNomUsuel(): ?string
+    public function getNom(): ?string
     {
-        return $this->nomUsuel;
+        return $this->nom;
     }
 
-    public function setNomUsuel(?string $nomUsuel): static
+    public function setNom(?string $nom): static
     {
-        $this->nomUsuel = $nomUsuel;
+        $this->nom = $nom;
 
         return $this;
     }
 
-    public function getNomNaissance(): ?string
-    {
-        return $this->nomNaissance;
-    }
-
-    public function setNomNaissance(string $nomNaissance): static
-    {
-        $this->nomNaissance = $nomNaissance;
-
-        return $this;
-    }
 
     public function getPrenom(): ?string
     {
@@ -184,48 +168,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    public function getNumTel(): ?string
-    {
-        return $this->numTel;
-    }
-
-    public function setNumTel(string $numTel): static
-    {
-        $this->numTel = $numTel;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Inscrire>
-     */
-    public function getInscrires(): Collection
-    {
-        return $this->inscrires;
-    }
-
-    public function addInscrire(Inscrire $inscrire): static
-    {
-        if (!$this->inscrires->contains($inscrire)) {
-            $this->inscrires->add($inscrire);
-            $inscrire->setUtilisateur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeInscrire(Inscrire $inscrire): static
-    {
-        if ($this->inscrires->removeElement($inscrire)) {
-            // set the owning side to null (unless already changed)
-            if ($inscrire->getUtilisateur() === $this) {
-                $inscrire->setUtilisateur(null);
-            }
-        }
 
         return $this;
     }
@@ -261,26 +203,56 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Matiere>
+     * @return Collection<int, Promotion>
      */
-    public function getMatiere(): Collection
+    public function getPromotion(): Collection
     {
-        return $this->matiere;
+        return $this->promotion;
     }
 
-    public function addMatiere(Matiere $matiere): static
+    public function addPromotion(Promotion $promotion): static
     {
-        if (!$this->matiere->contains($matiere)) {
-            $this->matiere->add($matiere);
+        if (!$this->promotion->contains($promotion)) {
+            $this->promotion->add($promotion);
         }
 
         return $this;
     }
 
-    public function removeMatiere(Matiere $matiere): static
+    public function removePromotion(Promotion $promotion): static
     {
-        $this->matiere->removeElement($matiere);
+        $this->promotion->removeElement($promotion);
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Session>
+     */
+    public function getSessions(): Collection
+    {
+        return $this->sessions;
+    }
+
+    public function addSession(Session $session): static
+    {
+        if (!$this->sessions->contains($session)) {
+            $this->sessions->add($session);
+            $session->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSession(Session $session): static
+    {
+        if ($this->sessions->removeElement($session)) {
+            // set the owning side to null (unless already changed)
+            if ($session->getUtilisateur() === $this) {
+                $session->setUtilisateur(null);
+            }
+        }
+
+        return $this;
+    }  
 }
