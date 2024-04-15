@@ -21,11 +21,9 @@ class Formation
     #[ORM\Column(length: 50)]
     private ?string $specialite = null;
 
-    #[ORM\OneToMany(targetEntity: Option::class, mappedBy: 'formation')]
-    private Collection $options;
-
     #[ORM\ManyToMany(targetEntity: Promotion::class, inversedBy: 'formations')]
     private Collection $promotion;
+
     
     public function __construct()
     {
@@ -114,6 +112,14 @@ class Formation
         $this->promotion->removeElement($promotion);
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Promotion>
+     */
+    public function getPromotions(): Collection
+    {
+        return $this->promotions;
     }
 
     

@@ -19,7 +19,7 @@ class SalleClasse
     #[ORM\Column(length: 10)]
     private ?string $nomSalle = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(length: 250)]
     private ?string $adresse = null;
 
     #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'salleClasse')]

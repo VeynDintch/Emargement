@@ -9,12 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: EmargerRepository::class)]
 class Emarger
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
+    
+   #[ORM\Column]
     private ?bool $presence = null;
 
     #[ORM\Column(length: 50, nullable: true)]
@@ -26,17 +22,14 @@ class Emarger
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTimeInterface $heureDepart = null;
 
+    #[ORM\Id]
     #[ORM\ManyToOne(inversedBy: 'emargers')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Session $session = null;
 
+    #[ORM\Id]
     #[ORM\ManyToOne(inversedBy: 'emargers')]
     private ?Utilisateur $utilisateur = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function isPresence(): ?bool
     {

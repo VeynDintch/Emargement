@@ -42,6 +42,12 @@ class Session
     #[ORM\OneToMany(targetEntity: Emarger::class, mappedBy: 'session')]
     private Collection $emargers;
 
+    #[ORM\ManyToOne(inversedBy: 'sessions')]
+    private ?Promotion $promotion = null;
+
+    #[ORM\ManyToOne(inversedBy: 'sessions')]
+    private ?Utilisateur $utilisateur = null;
+
     public function __construct()
     {
         $this->emargers = new ArrayCollection();
@@ -162,6 +168,30 @@ class Session
                 $emarger->setSession(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPromotion(): ?Promotion
+    {
+        return $this->promotion;
+    }
+
+    public function setPromotion(?Promotion $promotion): static
+    {
+        $this->promotion = $promotion;
+
+        return $this;
+    }
+
+    public function getUtilisateur(): ?Utilisateur
+    {
+        return $this->utilisateur;
+    }
+
+    public function setUtilisateur(?Utilisateur $utilisateur): static
+    {
+        $this->utilisateur = $utilisateur;
 
         return $this;
     }
