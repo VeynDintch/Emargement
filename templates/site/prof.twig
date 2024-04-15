@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4caf50;
+            color: #fff;
+        }
+    </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Professeurs</title>
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
+</head>
+<body>
+
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ path('home') }}">Accueil</a></li>
+                <li><a href="{{ path('login') }}">Login</a></li>
+                <li><a href="{{ path('professor') }}">Professeur</a></li>
+                <li><a href="{{ path('trainee') }}">Stagiaire</a></li>
+            </ul>
+        </nav>
+        <h1>Espace Professeurs</h1>
+    </header>
+
+    <main>
+        <section id="upload-section">
+            <h2>Upload de Fichier</h2>
+            <form action="{{ path('upload_file') }}" method="post" enctype="multipart/form-data">
+                <label for="file">Sélectionnez un fichier :</label>
+                <input type="file" id="file" name="file" required>
+                <button type="submit">Upload</button>
+            </form>
+        </section>
+
+        <section id="download-section">
+            <h2>Téléchargement de Fichier</h2>
+            <ul>
+                <li><a href="{{ path('download_file', { 'file_name': 'document1.pdf' }) }}" download="document1.pdf">Document 1 exemple</a></li>
+                <!-- Ajoutez d'autres liens de téléchargement si nécessaire -->
+            </ul>
+        </section>
+    </main>
+
+</body>
+</html>
