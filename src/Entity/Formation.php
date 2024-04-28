@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\FormationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FormationRepository::class)]
@@ -21,6 +23,14 @@ class Formation
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $nomOption = null;
+
+    #[ORM\OneToMany(targetEntity: Promotion::class, mappedBy: 'formation')]
+    private Collection $promotions;
+
+    public function __construct()
+    {
+        $this->promotions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -59,6 +69,36 @@ class Formation
     public function setNomOption(?string $nomOption): static
     {
         $this->nomOption = $nomOption;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Promotion>
+     */
+    public function getPromotions(): Collection
+    {
+        return $this->promotions;
+    }
+
+    public function addPromotion(Promotion $promotion): static
+    {
+        if (!$this->promotions->contains($promotion)) {
+            $this->promotions->add($promotion);
+            $promotion->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removePromotion(Promotion $promotion): static
+    {
+        if ($this->promotions->removeElement($promotion)) {
+            // set the owning side to null (unless already changed)
+            if ($promotion->getFormation() === $this) {
+                $promotion->setFormation(null);
+            }
+        }
 
         return $this;
     }

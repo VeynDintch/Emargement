@@ -25,6 +25,13 @@ class Emarger
     #[ORM\Column]
     private ?\DateTimeImmutable $heureDepart = null;
 
+    #[ORM\ManyToOne(inversedBy: 'emargers')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Session $session = null;
+
+    #[ORM\ManyToOne(inversedBy: 'emargers')]
+    private ?Utilisateur $utilisateur = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +81,30 @@ class Emarger
     public function setHeureDepart(\DateTimeImmutable $heureDepart): static
     {
         $this->heureDepart = $heureDepart;
+
+        return $this;
+    }
+
+    public function getSession(): ?Session
+    {
+        return $this->session;
+    }
+
+    public function setSession(?Session $session): static
+    {
+        $this->session = $session;
+
+        return $this;
+    }
+
+    public function getUtilisateur(): ?Utilisateur
+    {
+        return $this->utilisateur;
+    }
+
+    public function setUtilisateur(?Utilisateur $utilisateur): static
+    {
+        $this->utilisateur = $utilisateur;
 
         return $this;
     }
