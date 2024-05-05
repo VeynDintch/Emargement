@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Emarger index{% endblock %}
+
+{% block body %}
+    <h1>Emarger index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Presence</th>
+                <th>Alternative</th>
+                <th>HeureArrivee</th>
+                <th>HeureDepart</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for emarger in emargers %}
+            <tr>
+                <td>{{ emarger.id }}</td>
+                <td>{{ emarger.presence ? 'Yes' : 'No' }}</td>
+                <td>{{ emarger.alternative }}</td>
+                <td>{{ emarger.heureArrivee ? emarger.heureArrivee|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ emarger.heureDepart ? emarger.heureDepart|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_emarger_show', {'id': emarger.id}) }}">show</a>
+                    <a href="{{ path('app_emarger_edit', {'id': emarger.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_emarger_new') }}">Create new</a>
+{% endblock %}
