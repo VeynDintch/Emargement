@@ -10,8 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\security\Http\Attribute\IsGranted;
 
 #[Route('/salle/classe')]
+#[IsGranted('ROLE_ADMIN')]
 class SalleClasseController extends AbstractController
 {
     #[Route('/', name: 'app_salle_classe_index', methods: ['GET'])]
