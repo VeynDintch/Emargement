@@ -10,8 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\security\Http\Attribute\IsGranted;
 
 #[Route('/promotion')]
+#[IsGranted('ROLE_ADMIN')]
 class PromotionController extends AbstractController
 {
     #[Route('/', name: 'app_promotion_index', methods: ['GET'])]

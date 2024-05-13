@@ -8,6 +8,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 class UtilisateurType extends AbstractType
 {
@@ -22,7 +24,15 @@ class UtilisateurType extends AbstractType
                     'Administrateur' => "ROLE_ADMIN",
                 ],
             ])
-            ->add('password')
+            ->add('plaintextpassword', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'first_options'  => ['label' => 'Password'],
+                'second_options' => ['label' => 'Repeat Password'],
+                'mapped' => false,
+                'required' => false
+            ])
+        
+
             ->add('civilite')
             ->add('nom')
             ->add('prenom')
