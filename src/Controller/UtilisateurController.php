@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\security\Http\Attribute\IsGranted;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 #[Route('/utilisateur')]
 class UtilisateurController extends AbstractController
 {

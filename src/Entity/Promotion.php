@@ -29,16 +29,18 @@ class Promotion
     #[ORM\JoinColumn(nullable: false)]
     private ?Formation $formation = null;
 
-    #[ORM\OneToMany(targetEntity: Inscrire::class, mappedBy: 'promotion')]
-    private Collection $inscrires;
 
     #[ORM\ManyToMany(targetEntity: Session::class, mappedBy: 'promotion')]
     private Collection $sessions;
 
+    #[ORM\ManyToMany(targetEntity: Utilisateur::class, mappedBy: 'promotion')]
+    private Collection $utilisateurs;
+
     public function __construct()
     {
-        $this->inscrires = new ArrayCollection();
+        
         $this->sessions = new ArrayCollection();
+        $this->utilisateurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -94,35 +96,6 @@ class Promotion
         return $this;
     }
 
-    /**
-     * @return Collection<int, Inscrire>
-     */
-    public function getInscrires(): Collection
-    {
-        return $this->inscrires;
-    }
-
-    public function addInscrire(Inscrire $inscrire): static
-    {
-        if (!$this->inscrires->contains($inscrire)) {
-            $this->inscrires->add($inscrire);
-            $inscrire->setPromotion($this);
-        }
-
-        return $this;
-    }
-
-    public function removeInscrire(Inscrire $inscrire): static
-    {
-        if ($this->inscrires->removeElement($inscrire)) {
-            // set the owning side to null (unless already changed)
-            if ($inscrire->getPromotion() === $this) {
-                $inscrire->setPromotion(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Session>
@@ -146,6 +119,33 @@ class Promotion
     {
         if ($this->sessions->removeElement($session)) {
             $session->removePromotion($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Utilisateur>
+     */
+    public function getUtilisateurs(): Collection
+    {
+        return $this->utilisateurs;
+    }
+
+    public function addUtilisateur(Utilisateur $utilisateur): static
+    {
+        if (!$this->utilisateurs->contains($utilisateur)) {
+            $this->utilisateurs->add($utilisateur);
+            $utilisateur->addPromotion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUtilisateur(Utilisateur $utilisateur): static
+    {
+        if ($this->utilisateurs->removeElement($utilisateur)) {
+            $utilisateur->removePromotion($this);
         }
 
         return $this;
