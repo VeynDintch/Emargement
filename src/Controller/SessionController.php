@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\security\Http\Attribute\IsGranted;
 
 #[Route('/session')]
-#[IsGranted('ROLE_ADMIN')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class SessionController extends AbstractController
 {
     #[Route('/', name: 'app_session_index', methods: ['GET'])]

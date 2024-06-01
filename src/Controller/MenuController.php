@@ -19,7 +19,7 @@ class MenuController extends AbstractController
             ]);
         }
     
-    if ($this->isGranted('ROLE_STAGAIRE')){
+    if ($this->isGranted('ROLE_STAGIAIRE')){
         return $this->render('menu/index.html.twig', [
             'controller_name' => 'Je suis un Stagiaire',
         ]);
