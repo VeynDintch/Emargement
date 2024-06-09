@@ -2,40 +2,60 @@
 
 namespace App\Form;
 
+use App\Entity\Promotion;
 use App\Entity\Utilisateur;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
 
 class UtilisateurType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
-            ->add('roles', ChoiceType::class, [
-                'choices'  => [
-                    'Stagiaire' => "ROLE_STAGIAIRE",
-                    'Professeur' => "ROLE_PROFESSEUR",
-                    'Administrateur' => "ROLE_ADMIN",
+            ->add('civilite', ChoiceType::class, [
+                'choices' => [
+                    'M.' => 'M.',
+                    'Mme' => 'Mme',
+                    'Autre'=>'Autre'
                 ],
+            ])
+            ->add('nom')
+            ->add('prenom')
+            ->add('email')
+            ->add('promotion', EntityType::class, [
+                'class' => Promotion::class,
+                'choice_label' => function(Promotion $promotion) {
+                    return sprintf('%d-%s-%s-%s',$promotion->getAnnee(), $promotion->getFormation()->getCertification(), $promotion->getFormation()->getSpecialite(), $promotion->getFormation()->getNomOption());
+                },
+                'multiple' => true,
+                'expanded' => true,
+                'required' => false,
+            ])
+            ->add('roles', ChoiceType::class, [
+                'choices' => [
+                    'Admin' => 'ROLE_ADMIN',
+                    'Formateur' => 'ROLE_PROFESSEUR',
+                    'Stagiaire' => 'ROLE_STAGIAIRE',
+                ],
+                
             ])
             ->add('plaintextpassword', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'first_options'  => ['label' => 'Password'],
+                'first_options' => ['label' => 'Password'],
                 'second_options' => ['label' => 'Repeat Password'],
                 'mapped' => false,
                 'required' => false
             ])
         
 
-            ->add('civilite')
-            ->add('nom')
-            ->add('prenom')
+            
         ;
         // Data transformer for roles
         $builder->get('roles')
@@ -59,5 +79,4 @@ class UtilisateurType extends AbstractType
             'data_class' => Utilisateur::class,
         ]);
     }
-    
 }

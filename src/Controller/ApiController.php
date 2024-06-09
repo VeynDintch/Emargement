@@ -9,6 +9,9 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Componenent\HttpFoundation\JsonReponse;
 Use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\security\Http\Attribute\IsGranted;
+use App\Entity\Emarger;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use App\Repository\MatiereRepository;
 use App\Repository\UtilisateurRepository;
 use App\Repository\SessionRepository;
@@ -74,7 +77,7 @@ class ApiController extends AbstractController
         return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
 
-    #[Route('/api/emarger/{id}', name:"api_emarger_get", methods:['GET', 'POST'])]
+    #[Route('/api/emarger/{id}', name:"api_emarger_get", methods:['GET'])]
     public function getEmarger(Int $id, SerializerInterface $serializer, EmargerRepository $emargerRepository): JsonResponse
     {
         $emarger = $emargerRepository->find($id);
@@ -84,19 +87,8 @@ class ApiController extends AbstractController
         }
         return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
-    #[IsGranted('ROLE_ADMIN', 'ROLE_PROFESSEUR')]
-    #[Route('/api/emarger/{id}', name:"api_emarge_get", methods:['GET', 'POST', 'PUT'])]
-    public function getEmarge(Int $id, SerializerInterface $serializer, EmargerRepository $emargerRepository): JsonResponse
-    {
-        $emarge = $emargerRepository->find($id);
-        if($emarge){
-            $jsonEmarge = $serializer->serialize($emarge, 'json', ['groups' => 'getEmerge']);
-            return new JsonResponse($jsonEmarge, Response::HTTP_OK, [], true);
-        }
-        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+   
 
-
-    }
 
      #[Route('/api/formation/{id}', name:"api_formation_get", methods:['GET'])]
     public function getFormation(Int $id, SerializerInterface $serializer, FormationRepository $formationRepository): JsonResponse
@@ -110,5 +102,25 @@ class ApiController extends AbstractController
 
     }
 
-
+    #[Route('/emarger', name: 'api_emarger_new', methods: ['POST'])]
+    public function newEmarger(Request $request, SerializerInterface $serializer, EntityManagerInterface $em): JsonResponse
+    {
+        $emarger = $serializer->deserialize($request->getContent(), Emarger::class, 'json');
+        $em->persist($emarger);
+        $em->flush();
+        $jsonAlbum = $serializer->serialize($emarger, 'json');
+        return new JsonResponse($jsonMatiere, Response::HTTP_CREATED, [], true);
+    }
+    #[IsGranted('ROLE_PROFESSEUR')]
+    #[Route('/emarger/{id}', name:"api_emarger_update", methods:['PUT'])]
+    public function updateEmarger(Request $request, SerializerInterface $serializer, Matiere $currentEmarger, EntityManagerInterface $em): JsonResponse
+    {
+        $updatedEmarger = $serializer->deserialize($request->getContent(),
+                Emarger::class,
+                'json',
+                [AbstractNormalizer::OBJECT_TO_POPULATE => $currentEmarger]);
+        $em->persist($updatedEmarger);
+        $em->flush();
+        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
+   }
 }

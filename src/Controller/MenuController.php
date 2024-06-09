@@ -25,16 +25,11 @@ class MenuController extends AbstractController
         ]);
         }
     if ($this->isGranted('ROLE_ADMIN')){
-        $utilisateur = new Utilisateur();
-        $formUser = $this->createForm(UtilisateurType::class, $utilisateur ,array(action($this->generateUrl('app_utilisateur_new'))));
-        $session = new Session();
-        $formSession = $this->createForm(SessionType::class, $session,arry(action($this->generateUrl('app_utilisateur_new'))));
-        $Promotion = new Promotion();
-        $formPromotion =  $this->createForm(PromotinType::class, $promotin,arry(action($this->generateUrl('app_promotion_new'))));
+        
         return $this->render('menu/index.html.twig', [
             'controller_name' => 'Je suis un Admin',
         ]);
-
+        
         
         }
     } 

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sessions de l'Utilisateur{% endblock %}
+
+{% block body %}
+    <h1>Sessions de l'Utilisateur</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Intitulé</th>
+                <th scope="col">Date</th>
+                <th scope="col">Heure Début</th>
+                <th scope="col">Heure Fin</th>
+                <th scope="col">Commentaire</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for session in sessions %}
+                <tr>
+                    <td>{{ session.intitule }}</td>
+                    <td>{{ session.dateSession|date('d/m/Y') }}</td>
+                    <td>{{ session.heureDebut|date('H:i') }}</td>
+                    <td>{{ session.heureFin|date('H:i') }}</td>
+                    <td>{{ session.commentaire }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
