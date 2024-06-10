@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Repository;
 
 use App\Entity\Utilisateur;
@@ -23,7 +22,7 @@ class UtilisateurRepository extends ServiceEntityRepository implements PasswordU
     {
         parent::__construct($registry, Utilisateur::class);
     }
-
+     
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
@@ -37,6 +36,17 @@ class UtilisateurRepository extends ServiceEntityRepository implements PasswordU
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
+    public function findByPromotion($promotionId): array
+    {
+        return $this->createQueryBuilder('u')
+                ->leftJoin('u.promotion', 'p')
+                ->andWhere('p.id = :promotionId')
+                ->setParameter('promotionId', $promotionId)
+                ->orderBy('u.id', 'ASC')
+                ->getQuery()
+                ->getResult();
+    }
+    
 
     //    /**
     //     * @return Utilisateur[] Returns an array of Utilisateur objects

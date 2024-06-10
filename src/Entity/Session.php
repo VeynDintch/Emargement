@@ -49,6 +49,7 @@ class Session
     #[ORM\ManyToMany(targetEntity: Promotion::class, inversedBy: 'sessions')]
     private Collection $promotion;
 
+
     public function __construct()
     {
         $this->emargers = new ArrayCollection();
@@ -209,4 +210,5 @@ class Session
 
         return $this;
     }
+   
 }

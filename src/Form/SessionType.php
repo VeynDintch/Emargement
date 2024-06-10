@@ -7,6 +7,7 @@ use App\Entity\Promotion;
 use App\Entity\SalleClasse;
 use App\Entity\Session;
 use App\Entity\Utilisateur;
+use App\Repository\UtilisateurRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -30,20 +31,28 @@ class SessionType extends AbstractType
             ->add('commentaire')
             ->add('utilisateur', EntityType::class, [
                 'class' => Utilisateur::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
+                'query_builder' => function (UtilisateurRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->where('u.roles LIKE :role')
+                        ->setParameter('role', '%"ROLE_PROFESSEUR"%');
+                },
             ])
             ->add('matiere', EntityType::class, [
                 'class' => Matiere::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nomMatiere',
             ])
             ->add('salleClasse', EntityType::class, [
                 'class' => SalleClasse::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nomSalle',
             ])
             ->add('promotion', EntityType::class, [
                 'class' => Promotion::class,
-                'choice_label' => 'id',
-                'multiple' => true,
+                'choice_label' => function(Promotion $promotion) {
+                    return $promotion->getFormation()->getSpecialite();  // Afficher le nom de la formation
+                },
+                'multiple' => true, 
+                'expanded' => true,
             ])
         ;
     }

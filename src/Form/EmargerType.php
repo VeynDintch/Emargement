@@ -25,7 +25,9 @@ class EmargerType extends AbstractType
             ])
             ->add('session', EntityType::class, [
                 'class' => Session::class,
-                'choice_label' => 'id',
+                'choice_label' => function (Session $session) {
+                    return sprintf('%s - %s - %s', $session->getMatiere()->getnomMatiere(), $session->getIntitule(),$session->getSalleClasse()->getnomSalle());
+                },
             ])
             ->add('utilisateur', EntityType::class, [
                 'class' => Utilisateur::class,
