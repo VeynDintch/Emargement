@@ -18,10 +18,31 @@ use App\Repository\SessionRepository;
 use App\Repository\PromotionRepository;
 use App\Repository\SalleClasseRepository;
 use App\Repository\EmargerRepository;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
  #[Route('/api', name: 'app_api')]
 class ApiController extends AbstractController
 {   
+    #[Route("/api/login_check", name:"api_login", methods:["POST"])]
+    public function login(Request $request, UtilisateurRepository $userRepo, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $data = json_decode($request->getContent(), true);
+        $email = $data['email'];
+        $password = $data['password'];
+
+        $user = $userRepo->findOneBy(['email' => $email]);
+
+        if (!$user || !$passwordEncoder->isPasswordValid($user, $password)) {
+            return new JsonResponse(['error' => 'Invalid credentials'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
+
+        // Générer un token ou gérer une session ici
+        // Pour cet exemple, nous retournons juste un message de succès
+
+        return new JsonResponse(['status' => 'success']);
+    }
+
    
     #[Route('/api/matiere/{id}', name:"api_matiere_get", methods:['GET'])]
     public function getMatiere(Int $id, SerializerInterface $serializer, MatiereRepository $matiereRepository): JsonResponse
